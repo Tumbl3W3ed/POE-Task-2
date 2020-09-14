@@ -17,9 +17,10 @@ namespace POE
         public int Y { get; set; }
         public int X { get; set; }
 
+        public TileType ThisTileType { get; set; }
         public enum TileType
         {
-            Hero, Enemy, Gold, Weapon
+            Hero, Enemy, Gold, Weapon, Empty
         }
 
 

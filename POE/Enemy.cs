@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace POE
 {
-    class Hero : Character
+    class Enemy : Character
     {
-        public Hero(int y, int x, int maxhp) : base(y, x, maxhp, 2)
+        protected Random random = new Random();
+        public Enemy(int y, int x, int maxHp, int Damage) : base(y, x, maxHp, Damage)
         {
         }
 
@@ -19,7 +20,7 @@ namespace POE
 
         public override string ToString()
         {
-            return "Player Stats:\n" + "HP: " + Hp + "/" + MaxHP + "\nDamage: 2\n" + "[" + X + "," + Y + "]";
+            return nameof(Enemy) + "at ["+this.X+","+this.Y+"] ["+this.Damage+"]";
         }
     }
 }
