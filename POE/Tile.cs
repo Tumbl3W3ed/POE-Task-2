@@ -22,7 +22,5 @@ namespace POE
         {
             Hero, Enemy, Gold, Weapon, Empty
         }
-
-
     }
 }

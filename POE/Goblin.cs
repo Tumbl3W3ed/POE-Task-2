@@ -8,15 +8,15 @@ namespace POE
 {
     class Goblin : Enemy
     {
-        public Goblin(int y, int x) : base(y, x, 10, 1)
+        public Goblin(int y, int x) : base(y, x, 10, 1, 'G')
         {
-            
+
         }
 
         public override MovementEnum ReturnMove(MovementEnum move)
         {
             int direction = random.Next(1, 5);
-            while(HeroVision[direction].ThisTileType != TileType.Empty)
+            while (vision[direction].ThisTileType != TileType.Empty)
             {
                 continue;
             }

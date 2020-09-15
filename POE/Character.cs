@@ -8,28 +8,64 @@ namespace POE
 {
     abstract class Character : Tile
     {
-        protected int Hp { get; set; }
-        protected int MaxHP { get; set; }
-        protected int Damage { get; set; }
-        protected Tile[] HeroVision { get; set; }// up down left right
-        protected bool Dead { get; set; }
-        public enum MovementEnum 
+
+        protected char symbol { get; set; }
+        protected int hp { get; set; }
+        protected int maxHP { get; set; }
+        protected int damage { get; set; }
+        protected Tile[] vision { get; set; }// up down left right
+        protected bool dead { get; set; }
+
+        public char Symbol
+        {
+            get => symbol;
+            set => symbol = value;
+        }
+
+        public int Hp
+        {
+            get => hp;
+            set => hp = value;
+        }
+
+        public int MaxHp
+        {
+            get => maxHP;
+            set => maxHP = value;
+        }
+        public int Damage
+        {
+            get => damage;
+            set => damage = value;
+        }
+        public Tile[] Vision
+        {
+            get => vision;
+            set => vision = value;
+        }
+        public bool Dead
+        {
+            get => dead;
+            set => dead = value;
+        }
+        public enum MovementEnum
         {
             NoMovement, Up, Down, Left, Right
         }
-        public Character(int y, int x, int maxhp, int damage) : base(y, x)
+        public Character(int y, int x, int maxhp, int damage, char symbol) : base(y, x)
         {
-            MaxHP = maxhp;
-            Hp = maxhp;
-            Damage = damage;
+            this.symbol = symbol;
+            maxHP = maxhp;
+            hp = maxhp;
+            this.damage = damage;
         }
 
         public virtual void Attack(Character target)
         {
-            target.Hp -= this.Damage;
-            if (target.Hp <= 0)
+            target.hp -= this.damage;
+            if (target.hp <= 0)
             {
-                target.Dead = true;
+                target.dead = true;
             }
         }
 
@@ -60,12 +96,11 @@ namespace POE
             {
                 this.X--;
             }
-
         }
 
         public bool IsDead()
         {
-            return Dead;
+            return dead;
         }
         private int DistanceTo(Character target)
         {

@@ -6,21 +6,17 @@ using System.Threading.Tasks;
 
 namespace POE
 {
-    class Enemy : Character
+    abstract class Enemy : Character
     {
         protected Random random = new Random();
-        public Enemy(int y, int x, int maxHp, int Damage) : base(y, x, maxHp, Damage)
+        public Enemy(int y, int x, int maxHp, int Damage, char symbol) : base(y, x, maxHp, Damage,symbol)
         {
-        }
 
-        public override MovementEnum ReturnMove(MovementEnum move)
-        {
-            throw new NotImplementedException();
         }
 
         public override string ToString()
         {
-            return nameof(Enemy) + "at ["+this.X+","+this.Y+"] ["+this.Damage+"]";
+            return nameof(Enemy) + "at ["+this.X+","+this.Y+"] ("+this.damage+")";
         }
     }
 }
