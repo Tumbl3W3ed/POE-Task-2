@@ -71,6 +71,7 @@ namespace POE
             {
                 if (MovePlayer(Character.MovementEnum.Down))
                 {
+                   
                     map.UpdateVision();
                 }
             }

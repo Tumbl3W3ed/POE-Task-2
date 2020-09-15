@@ -37,11 +37,22 @@ namespace POE
             MapWidth = random.Next(minWidth, maxWidth + 1);
             MapHeight = random.Next(minHeight, maxHeight + 1);
             map = new Tile[MapWidth, MapHeight];
+            for (int x = 0; x < map.GetLength(0); x++)
+            {
+                for (int y = 0; y < map.GetLength(1); y++)
+                {
+                    map[x, y] = null;
+                }
+            }
             enemies = new Enemy[enemyAmount];
             for(int i = 0; i < enemies.Length; i++) { 
                enemies[i] = (Enemy)Create(Tile.TileType.Enemy);
+                enemies[i].ThisTileType = Tile.TileType.Enemy;
+                map[enemies[i].X, enemies[i].Y] = enemies[i];
             }
             hero = (Hero)Create(Tile.TileType.Hero);
+            hero.ThisTileType = Tile.TileType.Hero;
+            map[hero.X, hero.Y] = hero;
         }
 
         private Tile Create(Tile.TileType type)
@@ -53,8 +64,15 @@ namespace POE
                     return new Hero(random.Next(1, MapHeight), random.Next(1, MapWidth), 40);
 
                 case Tile.TileType.Enemy:
-                    return new Goblin(random.Next(1, MapHeight), random.Next(1, MapWidth));
-
+                    int x, y;
+                    x = random.Next(1, MapWidth);
+                    y = random.Next(1, MapHeight);
+                    while (map[x, y] != null)
+                    {
+                        x = random.Next(1, MapWidth);
+                        y = random.Next(1, MapHeight);
+                    }                    
+                    return new Goblin(x,y);
             }
             return null;
         }
