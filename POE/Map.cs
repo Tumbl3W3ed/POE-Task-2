@@ -34,8 +34,8 @@ namespace POE
         }
         public Map(int minWidth, int maxWidth, int minHeight, int maxHeight, int enemyAmount)
         {
-            MapWidth = random.Next(minWidth, maxWidth + 1);
-            MapHeight = random.Next(minHeight, maxHeight + 1);
+            MapWidth = random.Next(minWidth, maxWidth);
+            MapHeight = random.Next(minHeight, maxHeight);
             map = new Tile[MapWidth, MapHeight];
             for (int x = 0; x < map.GetLength(0); x++)
             {
@@ -45,13 +45,13 @@ namespace POE
                 }
             }
             enemies = new Enemy[enemyAmount];
-            for(int i = 0; i < enemies.Length; i++) { 
-               enemies[i] = (Enemy)Create(Tile.TileType.Enemy);
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                enemies[i] = (Enemy)Create(Tile.TileType.Enemy);
                 enemies[i].ThisTileType = Tile.TileType.Enemy;
                 map[enemies[i].X, enemies[i].Y] = enemies[i];
             }
             hero = (Hero)Create(Tile.TileType.Hero);
-            hero.ThisTileType = Tile.TileType.Hero;
             map[hero.X, hero.Y] = hero;
         }
 
@@ -60,9 +60,7 @@ namespace POE
             switch (type)
             {
                 case Tile.TileType.Hero:
-                    
                     return new Hero(random.Next(1, MapHeight), random.Next(1, MapWidth), 40);
-
                 case Tile.TileType.Enemy:
                     int x, y;
                     x = random.Next(1, MapWidth);
@@ -71,8 +69,8 @@ namespace POE
                     {
                         x = random.Next(1, MapWidth);
                         y = random.Next(1, MapHeight);
-                    }                    
-                    return new Goblin(x,y);
+                    }
+                    return new Goblin(x, y);
             }
             return null;
         }
@@ -80,7 +78,7 @@ namespace POE
         public void UpdateVision()
         {
             UpdateCharacterVision(hero);
-            foreach(Character c in enemies)
+            foreach (Character c in enemies)
             {
                 UpdateCharacterVision(c);
             }
@@ -88,7 +86,7 @@ namespace POE
 
         public void UpdateCharacterVision(Character character)
         {
-            character.Vision = new Tile[4]{map[character.X, character.Y-1], 
+            character.Vision = new Tile[4]{map[character.X, character.Y-1],
                 map[character.X, character.Y - 1], map[character.X - 1, character.Y],
                 map[character.X + 1, character.Y] };
         }

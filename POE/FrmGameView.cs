@@ -16,41 +16,46 @@ namespace POE
         public FrmGameView()
         {
             InitializeComponent();
-            gameEngine = new GameEngine(6,8,6,8,5);
-
+            gameEngine = new GameEngine(6, 8, 6, 8, 5);
             updateMap();
         }
 
         public void updateMap()
         {
-            string mapResult="";
+            string mapResult = "";
+            const int padWidth = 5;
             for (int x = 0; x < gameEngine.Map.ThisMap.GetLength(0); x++)
             {
                 for (int y = 0; y < gameEngine.Map.ThisMap.GetLength(1); y++)
                 {
-                    if(x==0||y == 0 || x== gameEngine.Map.ThisMap.GetLength(0)-1 ||y== gameEngine.Map.ThisMap.GetLength(1)-1)
+                    if (x == 0 || y == 0 || x == gameEngine.Map.ThisMap.GetLength(0) - 1 || y == gameEngine.Map.ThisMap.GetLength(1) - 1)
                     {
-                        mapResult += "X";
+                        mapResult += $"{"X",padWidth}";
                     }
-                    else if(gameEngine.Map.ThisMap[x,y] == null)
+                    else if (gameEngine.Map.ThisMap[x, y] == null)
                     {
-                        mapResult += ".";
+                        mapResult += $"{".",padWidth}";
                     }
                     else
                     {
                         if (gameEngine.Map.ThisMap[x, y].ThisTileType == Tile.TileType.Hero)
                         {
-                            mapResult += "H";
+                            mapResult += $"{"H",padWidth}";
                         }
                         else
                         {
-                            mapResult += "G";
-                        }                        
-                    }                    
+                            mapResult += $"{"G",padWidth}";
+                        }
+                    }
                 }
-                mapResult += "\n";
+                mapResult += "\n\n";
             }
             LblMap.Text = mapResult;
+        }
+
+        private void FrmGameView_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

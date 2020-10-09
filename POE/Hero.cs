@@ -11,6 +11,7 @@ namespace POE
     {
         public Hero(int y, int x, int maxhp) : base(y, x, maxhp, 2, 'H')
         {
+            this.ThisTileType = TileType.Hero;
         }
 
         public override MovementEnum ReturnMove(MovementEnum move)
