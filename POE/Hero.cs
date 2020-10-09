@@ -21,7 +21,7 @@ namespace POE
 
         public override string ToString()
         {
-            return "Player Stats:\n" + "HP: " + hp + "/" + maxHP + "\nDamage: 2\n" + "[" + X + "," + Y + "]";
+            return "Player Stats:\n" + "HP: " + hp + "/" + maxHP + "\nDamage: 2\n" + "[" + Y + "," + X + "]";
         }
     }
 }

@@ -51,6 +51,12 @@ namespace POE
                 mapResult += "\n\n";
             }
             LblMap.Text = mapResult;
+            UpdateHeroStats();
+        }
+
+        private void UpdateHeroStats()
+        {
+            LblPlayerStats.Text = gameEngine.Map.Hero.ToString();
         }
 
         private void FrmGameView_Load(object sender, EventArgs e)

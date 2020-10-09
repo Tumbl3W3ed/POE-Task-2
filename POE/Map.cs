@@ -36,12 +36,12 @@ namespace POE
         {
             MapWidth = random.Next(minWidth, maxWidth);
             MapHeight = random.Next(minHeight, maxHeight);
-            map = new Tile[MapWidth, MapHeight];
-            for (int x = 0; x < map.GetLength(0); x++)
+            map = new Tile[MapHeight, MapWidth];
+            for (int y = 0; y < map.GetLength(0); y++)
             {
-                for (int y = 0; y < map.GetLength(1); y++)
+                for (int x = 0; x < map.GetLength(1); x++)
                 {
-                    map[x, y] = null;
+                    map[y, x] = null;
                 }
             }
             enemies = new Enemy[enemyAmount];
@@ -49,10 +49,10 @@ namespace POE
             {
                 enemies[i] = (Enemy)Create(Tile.TileType.Enemy);
                 enemies[i].ThisTileType = Tile.TileType.Enemy;
-                map[enemies[i].X, enemies[i].Y] = enemies[i];
+                map[enemies[i].Y, enemies[i].X] = enemies[i];
             }
             hero = (Hero)Create(Tile.TileType.Hero);
-            map[hero.X, hero.Y] = hero;
+            map[hero.Y, hero.X] = hero;
         }
 
         private Tile Create(Tile.TileType type)
@@ -60,17 +60,17 @@ namespace POE
             switch (type)
             {
                 case Tile.TileType.Hero:
-                    return new Hero(random.Next(1, MapHeight), random.Next(1, MapWidth), 40);
+                    return new Hero(random.Next(1, MapHeight-1), random.Next(1, MapWidth-1), 40);
                 case Tile.TileType.Enemy:
                     int x, y;
-                    x = random.Next(1, MapWidth);
-                    y = random.Next(1, MapHeight);
+                    x = random.Next(1, MapWidth-1);
+                    y = random.Next(1, MapHeight-1);
                     while (map[x, y] != null)
                     {
-                        x = random.Next(1, MapWidth);
-                        y = random.Next(1, MapHeight);
+                        x = random.Next(1, MapWidth-1);
+                        y = random.Next(1, MapHeight-1);
                     }
-                    return new Goblin(x, y);
+                    return new Goblin(y, x);
             }
             return null;
         }
