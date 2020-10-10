@@ -81,6 +81,7 @@ namespace POE
 
         public void Move(MovementEnum move)
         {
+            //if move == nomovement nothing will happen
             if (move == MovementEnum.Down)
             {
                 this.Y++;

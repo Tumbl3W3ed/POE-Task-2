@@ -14,7 +14,18 @@ namespace POE
 
         public override MovementEnum ReturnMove(MovementEnum move)
         {
-            throw new NotImplementedException();
+            return MovementEnum.NoMovement;
+        }
+
+        public override bool CheckRange(Character target)
+        {
+            
+            if(target.X == this.X || target.X == this.X-1 || target.X == this.X+1)
+            {
+                if(target.Y == this.Y || target.Y == this.Y - 1 || target.Y == this.Y + 1)
+                    return true;
+            }
+            return false;
         }
     }
 }
