@@ -16,9 +16,9 @@ namespace POE
             get => map;
         }
 
-        public GameEngine(int minWidth, int maxWidth, int minHeight, int maxHeight, int enemyAmount)
+        public GameEngine(int minWidth, int maxWidth, int minHeight, int maxHeight, int enemyAmount, int amountOfGoldPickUps)
         {
-            map = new Map(minWidth, maxWidth, minHeight, maxHeight, enemyAmount);
+            map = new Map(minWidth, maxWidth, minHeight, maxHeight, enemyAmount, amountOfGoldPickUps);
         }
 
         public bool MovePlayer(Character.MovementEnum direction)
@@ -35,7 +35,7 @@ namespace POE
             }
             else if (direction == Character.MovementEnum.Right)
             {
-                if (map.Hero.X + 2 != map.MapHeight && map.Hero.Vision[3] == null)
+                if (map.Hero.X + 2 != map.MapWidth && map.Hero.Vision[3] == null)
                 {
                     map.ThisMap[map.Hero.Y, map.Hero.X] = null;
                     map.Hero.Move(Character.MovementEnum.Right);
@@ -55,7 +55,7 @@ namespace POE
             }
             else
             {
-                if (map.Hero.Y + 2 != map.MapWidth && map.Hero.Vision[1] == null)
+                if (map.Hero.Y + 2 != map.MapHeight && map.Hero.Vision[1] == null)
                 {
                     map.ThisMap[map.Hero.Y, map.Hero.X] = null;
                     map.Hero.Move(Character.MovementEnum.Down);

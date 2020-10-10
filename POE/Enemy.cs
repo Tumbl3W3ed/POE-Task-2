@@ -16,7 +16,7 @@ namespace POE
 
         public override string ToString()
         {
-            return nameof(Enemy) + "at ["+this.X+","+this.Y+"] ("+this.damage+")";
+            return nameof(Enemy) + "at ["+this.X+","+this.Y+"] with ("+this.hp+") hp";
         }
     }
 }

@@ -11,6 +11,7 @@ namespace POE
         private Tile[,] map { get; set; }
         private Hero hero;
         private Enemy[] enemies;
+        private Item[] items;
         public int MapWidth;
         public int MapHeight;
         private Random random = new Random();
@@ -32,11 +33,12 @@ namespace POE
             get => enemies;
             set => enemies = value;
         }
-        public Map(int minWidth, int maxWidth, int minHeight, int maxHeight, int enemyAmount)
+        public Map(int minWidth, int maxWidth, int minHeight, int maxHeight, int enemyAmount, int AmountOfGoldPicks)
         {
             MapWidth = random.Next(minWidth, maxWidth);
             MapHeight = random.Next(minHeight, maxHeight);
             map = new Tile[MapHeight, MapWidth];
+            items = new Item[AmountOfGoldPicks];
             for (int y = 0; y < map.GetLength(0); y++)
             {
                 for (int x = 0; x < map.GetLength(1); x++)
@@ -49,29 +51,43 @@ namespace POE
             enemies = new Enemy[enemyAmount];
             for (int i = 0; i < enemies.Length; i++)
             {
+
                 enemies[i] = (Enemy)Create(Tile.TileType.Enemy);
                 enemies[i].ThisTileType = Tile.TileType.Enemy;
                 map[enemies[i].Y, enemies[i].X] = enemies[i];
             }
+            for (int i = 0; i < items.Length; i++)
+            {
 
+                items[i] = (Item) Create(Tile.TileType.Gold);
+                items[i].ThisTileType = Tile.TileType.Gold;
+                map[items[i].Y, items[i].X] = items[i];
+            }
         }
 
         private Tile Create(Tile.TileType type)
         {
+            int x, y;
+            x = random.Next(1, MapWidth - 1);
+            y = random.Next(1, MapHeight - 1);
+            while (map[y, x] != null)
+            {
+                x = random.Next(1, MapWidth - 1);
+                y = random.Next(1, MapHeight - 1);
+            }
             switch (type)
             {
                 case Tile.TileType.Hero:
-                    return new Hero(random.Next(1, MapHeight - 1), random.Next(1, MapWidth - 1), 40);
+                    return new Hero(y, x, 40);                    
                 case Tile.TileType.Enemy:
-                    int x, y;
-                    x = random.Next(1, MapWidth - 1);
-                    y = random.Next(1, MapHeight - 1);
-                    while (map[x, y] != null)
+
+                    if (random.Next(4) > 2)
                     {
-                        x = random.Next(1, MapWidth - 1);
-                        y = random.Next(1, MapHeight - 1);
-                    }
+                        return new Mage(y, x);
+                    }                  
                     return new Goblin(y, x);
+                case Tile.TileType.Gold:
+                    return new Gold(y,x);
             }
             return null;
         }
@@ -87,10 +103,6 @@ namespace POE
 
         public void UpdateCharacterVision(Character character)
         {
-            Console.WriteLine(character.Y - 1);
-            Console.WriteLine(character.X - 1);
-            Console.WriteLine(character.Y + 1);
-            Console.WriteLine(character.X + 1);
 
             character.Vision = new Tile[4]{map[character.Y-1, character.X],
                 map[character.Y +1, character.X], map[character.Y, character.X - 1],

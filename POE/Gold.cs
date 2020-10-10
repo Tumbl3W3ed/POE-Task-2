@@ -13,6 +13,7 @@ namespace POE
         public Gold(int y, int x) : base(y, x)
         {
             gold = random.Next(1, 6);
+            ThisTileType = Tile.TileType.Gold;
         }
 
         public override string ToString()

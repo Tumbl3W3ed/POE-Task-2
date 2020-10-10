@@ -8,7 +8,7 @@ namespace POE
 {
     class Mage : Enemy
     {
-        public Mage(int y, int x, int maxHp, int Damage, char symbol) : base(y, x, maxHp, Damage, symbol)
+        public Mage(int y, int x) : base(y, x, 10, 2, 'M')
         {
         }
 

@@ -16,7 +16,7 @@ namespace POE
         public FrmGameView()
         {
             InitializeComponent();
-            gameEngine = new GameEngine(6, 8, 6, 8, 5);
+            gameEngine = new GameEngine(6, 8, 6, 8, 5, 4);
             updateMap();
         }
 
@@ -42,7 +42,11 @@ namespace POE
                         {
                             mapResult += $"{"H",padWidth}";
                         }
-                        else
+                        else if (gameEngine.Map.ThisMap[y, x].ThisTileType == Tile.TileType.Gold)
+                        {
+                            mapResult += $"{"g",padWidth}";
+                        }
+                        else if (gameEngine.Map.ThisMap[y, x].ThisTileType == Tile.TileType.Enemy)
                         {
                             mapResult += $"{"G",padWidth}";
                         }
@@ -52,6 +56,8 @@ namespace POE
             }
             LblMap.Text = mapResult;
             UpdateHeroStats();
+            gameEngine.Map.UpdateVision();
+            updateAttackTargets();
         }
 
         private void UpdateHeroStats()
@@ -64,39 +70,97 @@ namespace POE
 
         }
 
-        private void FrmGameView_KeyDown(object sender, KeyEventArgs e)
+        private void Attack(Character target)
         {
-            Console.WriteLine("moved");
+            gameEngine.Map.Hero.Attack(target);
+            lblCombat.Text = ((Enemy)target).ToString();
+            if (target.IsDead())
+            {
+                lblCombat.Text = "";
+                gameEngine.Map.ThisMap[target.Y, target.X] = null;
+                updateMap();
+            }
+        }
 
-            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.W)
-            {
-                if (gameEngine.MovePlayer(Character.MovementEnum.Up))
+
+        private void updateAttackTargets()
+        {
+            btnAttackUp.Enabled = false;
+            btnAttackDown.Enabled = false;
+            btnAttackRight.Enabled = false;
+            btnAttackLeft.Enabled = false;
+            if (gameEngine.Map.Hero.Vision[(int)Character.MovementEnum.Up - 1] != null)
+                if (gameEngine.Map.Hero.Vision[(int)Character.MovementEnum.Up - 1].ThisTileType == Tile.TileType.Enemy)
                 {
-                    gameEngine.Map.UpdateVision();
+                    btnAttackUp.Enabled = true;
                 }
-            }
-            if (e.KeyCode == Keys.Down || e.KeyCode == Keys.S)
-            {
-                if (gameEngine.MovePlayer(Character.MovementEnum.Down))
+            if (gameEngine.Map.Hero.Vision[(int)Character.MovementEnum.Down - 1] != null)
+                if (gameEngine.Map.Hero.Vision[(int)Character.MovementEnum.Down - 1].ThisTileType == Tile.TileType.Enemy)
                 {
-                    gameEngine.Map.UpdateVision();
+                    btnAttackDown.Enabled = true;
                 }
-            }
-            if (e.KeyCode == Keys.Left || e.KeyCode == Keys.A)
-            {
-                if (gameEngine.MovePlayer(Character.MovementEnum.Left))
+            if (gameEngine.Map.Hero.Vision[(int)Character.MovementEnum.Left - 1] != null)
+                if (gameEngine.Map.Hero.Vision[(int)Character.MovementEnum.Left - 1].ThisTileType == Tile.TileType.Enemy)
                 {
-                    gameEngine.Map.UpdateVision();
+                    btnAttackLeft.Enabled = true;
                 }
-            }
-            if (e.KeyCode == Keys.Right || e.KeyCode == Keys.D)
-            {
-                if (gameEngine.MovePlayer(Character.MovementEnum.Right))
+            if (gameEngine.Map.Hero.Vision[(int)Character.MovementEnum.Right - 1] != null)
+                if (gameEngine.Map.Hero.Vision[(int)Character.MovementEnum.Right - 1].ThisTileType == Tile.TileType.Enemy)
                 {
-                    gameEngine.Map.UpdateVision();
+                    btnAttackRight.Enabled = true;
                 }
+        }
+
+        private void BtnAttackUp_Click(object sender, EventArgs e)
+        {
+            Attack((Character)gameEngine.Map.Hero.Vision[(int)Character.MovementEnum.Up - 1]);
+        }
+
+        private void BtnAttackDown_Click(object sender, EventArgs e)
+        {
+            Attack((Character)gameEngine.Map.Hero.Vision[(int)Character.MovementEnum.Down - 1]);
+        }
+
+        private void BtnAttackLeft_Click(object sender, EventArgs e)
+        {
+            Attack((Character)gameEngine.Map.Hero.Vision[(int)Character.MovementEnum.Left - 1]);
+        }
+
+        private void BtnAttackRight_Click(object sender, EventArgs e)
+        {
+            Attack((Character)gameEngine.Map.Hero.Vision[(int)Character.MovementEnum.Right - 1]);
+        }
+
+        private void btnMoveUp_Click(object sender, EventArgs e)
+        {
+            if (gameEngine.MovePlayer(Character.MovementEnum.Up))
+            {
+                updateMap();
             }
-            updateMap();
+        }
+
+        private void btnMoveDown_Click(object sender, EventArgs e)
+        {
+            if (gameEngine.MovePlayer(Character.MovementEnum.Down))
+            {
+                updateMap();
+            }
+        }
+
+        private void btnMoveLeft_Click(object sender, EventArgs e)
+        {
+            if (gameEngine.MovePlayer(Character.MovementEnum.Left))
+            {
+                updateMap();
+            }
+        }
+
+        private void btnMoveRight_Click(object sender, EventArgs e)
+        {
+            if (gameEngine.MovePlayer(Character.MovementEnum.Right))
+            {
+                updateMap();
+            }
         }
     }
 }
