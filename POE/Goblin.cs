@@ -15,12 +15,12 @@ namespace POE
 
         public override MovementEnum ReturnMove(MovementEnum move)
         {
-            int direction = random.Next(0, 4);
+            int direction = random.Next(0, 5);
             while (vision[direction] != null)
             {
-                direction = random.Next(0, 4);                
+                direction = random.Next(0, 5);                
             }
-            return (MovementEnum)direction+1;
+            return (MovementEnum)direction;
         }
     }
 }

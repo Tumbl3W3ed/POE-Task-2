@@ -61,6 +61,7 @@
             this.Name = "FrmGameView";
             this.Text = "Battle";
             this.Load += new System.EventHandler(this.FrmGameView_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmGameView_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

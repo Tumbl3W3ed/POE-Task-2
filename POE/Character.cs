@@ -58,6 +58,7 @@ namespace POE
             maxHP = maxhp;
             hp = maxhp;
             this.damage = damage;
+            vision = new Tile[4];
         }
 
         public virtual void Attack(Character target)

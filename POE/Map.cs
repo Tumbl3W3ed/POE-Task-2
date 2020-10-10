@@ -11,8 +11,8 @@ namespace POE
         private Tile[,] map { get; set; }
         private Hero hero;
         private Enemy[] enemies;
-        private int MapWidth;
-        private int MapHeight;
+        public int MapWidth;
+        public int MapHeight;
         private Random random = new Random();
 
         public Tile[,] ThisMap
@@ -44,6 +44,8 @@ namespace POE
                     map[y, x] = null;
                 }
             }
+            hero = (Hero)Create(Tile.TileType.Hero);
+            map[hero.Y, hero.X] = hero;
             enemies = new Enemy[enemyAmount];
             for (int i = 0; i < enemies.Length; i++)
             {
@@ -51,8 +53,7 @@ namespace POE
                 enemies[i].ThisTileType = Tile.TileType.Enemy;
                 map[enemies[i].Y, enemies[i].X] = enemies[i];
             }
-            hero = (Hero)Create(Tile.TileType.Hero);
-            map[hero.Y, hero.X] = hero;
+
         }
 
         private Tile Create(Tile.TileType type)
@@ -60,15 +61,15 @@ namespace POE
             switch (type)
             {
                 case Tile.TileType.Hero:
-                    return new Hero(random.Next(1, MapHeight-1), random.Next(1, MapWidth-1), 40);
+                    return new Hero(random.Next(1, MapHeight - 1), random.Next(1, MapWidth - 1), 40);
                 case Tile.TileType.Enemy:
                     int x, y;
-                    x = random.Next(1, MapWidth-1);
-                    y = random.Next(1, MapHeight-1);
+                    x = random.Next(1, MapWidth - 1);
+                    y = random.Next(1, MapHeight - 1);
                     while (map[x, y] != null)
                     {
-                        x = random.Next(1, MapWidth-1);
-                        y = random.Next(1, MapHeight-1);
+                        x = random.Next(1, MapWidth - 1);
+                        y = random.Next(1, MapHeight - 1);
                     }
                     return new Goblin(y, x);
             }
@@ -86,9 +87,14 @@ namespace POE
 
         public void UpdateCharacterVision(Character character)
         {
-            character.Vision = new Tile[4]{map[character.X, character.Y-1],
-                map[character.X, character.Y - 1], map[character.X - 1, character.Y],
-                map[character.X + 1, character.Y] };
+            Console.WriteLine(character.Y - 1);
+            Console.WriteLine(character.X - 1);
+            Console.WriteLine(character.Y + 1);
+            Console.WriteLine(character.X + 1);
+
+            character.Vision = new Tile[4]{map[character.Y-1, character.X],
+                map[character.Y +1, character.X], map[character.Y, character.X - 1],
+                map[character.Y, character.X+1] };
         }
     }
 }

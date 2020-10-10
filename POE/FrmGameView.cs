@@ -24,21 +24,21 @@ namespace POE
         {
             string mapResult = "";
             const int padWidth = 5;
-            for (int x = 0; x < gameEngine.Map.ThisMap.GetLength(0); x++)
+            for (int y = 0; y < gameEngine.Map.ThisMap.GetLength(0); y++)
             {
-                for (int y = 0; y < gameEngine.Map.ThisMap.GetLength(1); y++)
+                for (int x = 0; x < gameEngine.Map.ThisMap.GetLength(1); x++)
                 {
-                    if (x == 0 || y == 0 || x == gameEngine.Map.ThisMap.GetLength(0) - 1 || y == gameEngine.Map.ThisMap.GetLength(1) - 1)
+                    if (y == 0 || x == 0 || y == gameEngine.Map.ThisMap.GetLength(0) - 1 || x == gameEngine.Map.ThisMap.GetLength(1) - 1)
                     {
                         mapResult += $"{"X",padWidth}";
                     }
-                    else if (gameEngine.Map.ThisMap[x, y] == null)
+                    else if (gameEngine.Map.ThisMap[y, x] == null)
                     {
                         mapResult += $"{".",padWidth}";
                     }
                     else
                     {
-                        if (gameEngine.Map.ThisMap[x, y].ThisTileType == Tile.TileType.Hero)
+                        if (gameEngine.Map.ThisMap[y, x].ThisTileType == Tile.TileType.Hero)
                         {
                             mapResult += $"{"H",padWidth}";
                         }
@@ -62,6 +62,41 @@ namespace POE
         private void FrmGameView_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void FrmGameView_KeyDown(object sender, KeyEventArgs e)
+        {
+            Console.WriteLine("moved");
+
+            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.W)
+            {
+                if (gameEngine.MovePlayer(Character.MovementEnum.Up))
+                {
+                    gameEngine.Map.UpdateVision();
+                }
+            }
+            if (e.KeyCode == Keys.Down || e.KeyCode == Keys.S)
+            {
+                if (gameEngine.MovePlayer(Character.MovementEnum.Down))
+                {
+                    gameEngine.Map.UpdateVision();
+                }
+            }
+            if (e.KeyCode == Keys.Left || e.KeyCode == Keys.A)
+            {
+                if (gameEngine.MovePlayer(Character.MovementEnum.Left))
+                {
+                    gameEngine.Map.UpdateVision();
+                }
+            }
+            if (e.KeyCode == Keys.Right || e.KeyCode == Keys.D)
+            {
+                if (gameEngine.MovePlayer(Character.MovementEnum.Right))
+                {
+                    gameEngine.Map.UpdateVision();
+                }
+            }
+            updateMap();
         }
     }
 }
