@@ -25,41 +25,45 @@ namespace POE
         {
             if (direction == Character.MovementEnum.Left)
             {
-                if (map.Hero.X - 1 != 0 && map.Hero.Vision[2] == null)
+                if (map.Hero.X - 1 != 0 && (map.Hero.Vision[2] == null || map.Hero.Vision[2].ThisTileType == Tile.TileType.Gold))
                 {
                     map.ThisMap[map.Hero.Y, map.Hero.X] = null;
                     map.Hero.Move(Character.MovementEnum.Left);
                     map.ThisMap[map.Hero.Y, map.Hero.X] = map.Hero;
+                    map.Hero.Pickup(map.GetItemAtPosition(map.Hero.Y, map.Hero.X));
                     return true;
                 }
             }
             else if (direction == Character.MovementEnum.Right)
             {
-                if (map.Hero.X + 2 != map.MapWidth && map.Hero.Vision[3] == null)
+                if (map.Hero.X + 2 != map.MapWidth && (map.Hero.Vision[3] == null || map.Hero.Vision[3].ThisTileType == Tile.TileType.Gold))
                 {
                     map.ThisMap[map.Hero.Y, map.Hero.X] = null;
                     map.Hero.Move(Character.MovementEnum.Right);
                     map.ThisMap[map.Hero.Y, map.Hero.X] = map.Hero;
+                    map.Hero.Pickup(map.GetItemAtPosition(map.Hero.Y, map.Hero.X));
                     return true;
                 }
             }
             else if (direction == Character.MovementEnum.Up)
             {
-                if (map.Hero.Y - 1 != 0 && map.Hero.Vision[0] == null)
+                if (map.Hero.Y - 1 != 0 && (map.Hero.Vision[0] == null || map.Hero.Vision[0].ThisTileType == Tile.TileType.Gold))
                 {
                     map.ThisMap[map.Hero.Y, map.Hero.X] = null;
                     map.Hero.Move(Character.MovementEnum.Up);
                     map.ThisMap[map.Hero.Y, map.Hero.X] = map.Hero;
+                    map.Hero.Pickup(map.GetItemAtPosition(map.Hero.Y, map.Hero.X));
                     return true;
                 }
             }
             else
             {
-                if (map.Hero.Y + 2 != map.MapHeight && map.Hero.Vision[1] == null)
+                if (map.Hero.Y + 2 != map.MapHeight && (map.Hero.Vision[1] == null || map.Hero.Vision[1].ThisTileType == Tile.TileType.Gold))
                 {
                     map.ThisMap[map.Hero.Y, map.Hero.X] = null;
                     map.Hero.Move(Character.MovementEnum.Down);
                     map.ThisMap[map.Hero.Y, map.Hero.X] = map.Hero;
+                    map.Hero.Pickup(map.GetItemAtPosition(map.Hero.Y, map.Hero.X));
                     return true;
                 }
             }

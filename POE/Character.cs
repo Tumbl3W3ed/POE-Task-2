@@ -16,6 +16,13 @@ namespace POE
         protected Tile[] vision { get; set; }// up down left right
         protected bool dead { get; set; }
 
+        protected int purse { get; set; }
+
+        public int Purse
+        {
+            get => purse;
+            set => purse = value;
+        }
         public char Symbol
         {
             get => symbol;
@@ -59,6 +66,18 @@ namespace POE
             hp = maxhp;
             this.damage = damage;
             vision = new Tile[4];
+        }
+
+        public void Pickup(Item i)
+        {
+            if(i == null)
+            {
+                return;
+            }
+            if (i.GetType() == typeof(Gold))
+            {
+                purse += ((Gold)i).GetGold();
+            }
         }
 
         public virtual void Attack(Character target)

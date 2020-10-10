@@ -92,6 +92,25 @@ namespace POE
             return null;
         }
 
+        public Item GetItemAtPosition(int y, int x)
+        {
+            Item item = null;
+            for (int i = 0; i < items.Length; i++)
+            {
+                if(items[i] == null)
+                {
+                    continue;
+                }
+                if (items[i].X == x && items[i].Y == y)
+                {
+                    item = items[i];
+                    items[i] = null;
+                    return item;
+                }                
+            }
+            return null;
+        }
+
         public void UpdateVision()
         {
             UpdateCharacterVision(hero);
