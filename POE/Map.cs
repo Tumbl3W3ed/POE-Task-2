@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace POE
 {
+    [Serializable()]
     class Map
     {
         private Tile[,] map { get; set; }
@@ -16,6 +17,11 @@ namespace POE
         public int MapHeight;
         private Random random = new Random();
 
+        public Random Random
+        {
+            get => random;
+            set => random = value;
+        }
         public Tile[,] ThisMap
         {
             get => map;

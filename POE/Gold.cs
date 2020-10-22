@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace POE
 {
+    [System.Serializable()]
     class Gold : Item
     {
         private int gold;
-        private Random random = new Random();           
+        private Random random = new Random();
         public Gold(int y, int x) : base(y, x)
         {
             gold = random.Next(1, 6);

@@ -1,26 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace POE
+﻿namespace POE
 {
+    [System.Serializable()]
     abstract class Tile
     {
-        protected Tile(int y, int x)
+        protected int x, y;
+
+
+        public Tile(int y, int x)
         {
-            Y = y;
-            X = x;
+            this.y = y;
+            this.x = x;
         }
 
-        public int Y { get; set; }
-        public int X { get; set; }
+        public int Y { get { return y; } set { y = value; } }
+        public int X { get { return x; } set { x = value; } }
 
         public TileType ThisTileType { get; set; }
         public enum TileType
         {
             Hero, Enemy, Gold, Weapon, Empty
+        }        
+        
+
+        public enum TileType2
+        {
+            Hero =0, Enemy, Gold, Weapon, Empty
         }
     }
 }

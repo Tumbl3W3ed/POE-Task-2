@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace POE
@@ -13,13 +8,20 @@ namespace POE
     public partial class FrmGameView : Form
     {
         GameEngine gameEngine;
+        FileRead fileRead = new FileRead();
+        FileWrite fileWrite = new FileWrite();
         public FrmGameView()
         {
             InitializeComponent();
             gameEngine = new GameEngine(6, 8, 6, 8, 5, 4);
             updateMap();
+            lblCombat.Text = "Combat Information:";
         }
 
+        public void Save()
+        {
+            fileWrite.WriteData<Map>(gameEngine.Map);
+        }
         public void updateMap()
         {
             string mapResult = "";
@@ -38,26 +40,31 @@ namespace POE
                     }
                     else
                     {
-                        if (gameEngine.Map.ThisMap[y, x].ThisTileType == Tile.TileType.Hero)
-                        {
-                            mapResult += $"{"H",padWidth}";
-                        }
-                        else if (gameEngine.Map.ThisMap[y, x].ThisTileType == Tile.TileType.Gold)
+                        if (gameEngine.Map.ThisMap[y, x].ThisTileType == Tile.TileType.Gold)
                         {
                             mapResult += $"{"g",padWidth}";
                         }
-                        else if (gameEngine.Map.ThisMap[y, x].ThisTileType == Tile.TileType.Enemy)
-                        {
-                            mapResult += $"{"G",padWidth}";
-                        }
+                        else
+                            mapResult += $"{((Character)gameEngine.Map.ThisMap[y, x]).Symbol,padWidth}";
+
                     }
                 }
                 mapResult += "\n\n";
             }
             LblMap.Text = mapResult;
             UpdateHeroStats();
-            gameEngine.Map.UpdateVision();
             updateAttackTargets();
+            updateEnemyStats();
+        }
+
+        private void updateEnemyStats()
+        {
+            string output = "";
+            foreach (var enemy in gameEngine.Map.Enemies)
+            {
+                output += enemy.ToString() + "\n";
+            }
+            lblEnemyData.Text = "Enemy Data:\n" + output;
         }
 
         private void UpdateHeroStats()
@@ -65,26 +72,36 @@ namespace POE
             LblPlayerStats.Text = gameEngine.Map.Hero.ToString();
         }
 
-        private void FrmGameView_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void Attack(Character target)
         {
             gameEngine.Map.Hero.Attack(target);
-            lblCombat.Text = ((Enemy)target).ToString();
+            lblCombat.Text = "Combat Information:\n" + ((Enemy)target).ToString();
             if (target.IsDead())
             {
-                lblCombat.Text = "";
+                lblCombat.Text = "Combat Information:";
                 gameEngine.Map.ThisMap[target.Y, target.X] = null;
-                updateMap();
             }
+            gameEngine.EnemyAttacks();
+            RemoveEnemies();
+            updateMap();
         }
 
+        private void RemoveEnemies()
+        {
+            for (int i = 0; i < gameEngine.Map.Enemies.Length; i++)
+            {
+                if (gameEngine.Map.Enemies[i].IsDead())
+                {
+                    gameEngine.Map.ThisMap[gameEngine.Map.Enemies[i].Y, gameEngine.Map.Enemies[i].X] = null;
+                    gameEngine.Map.Enemies[i] = null;
+                }
+            }
+            gameEngine.Map.Enemies = gameEngine.Map.Enemies.Where(thisClass => thisClass != null).ToArray();
+        }
 
         private void updateAttackTargets()
         {
+            gameEngine.Map.UpdateVision();
             btnAttackUp.Enabled = false;
             btnAttackDown.Enabled = false;
             btnAttackRight.Enabled = false;
@@ -133,34 +150,58 @@ namespace POE
 
         private void btnMoveUp_Click(object sender, EventArgs e)
         {
-            if (gameEngine.MovePlayer(Character.MovementEnum.Up))
+            if (gameEngine.MovePlayer(Character.MovementEnum.Up, gameEngine.Map.Hero))
             {
+                gameEngine.EnemiesMove();
+                RemoveEnemies();
                 updateMap();
             }
         }
 
         private void btnMoveDown_Click(object sender, EventArgs e)
         {
-            if (gameEngine.MovePlayer(Character.MovementEnum.Down))
+            if (gameEngine.MovePlayer(Character.MovementEnum.Down, gameEngine.Map.Hero))
             {
+                gameEngine.EnemiesMove();
+                RemoveEnemies();
                 updateMap();
             }
         }
 
         private void btnMoveLeft_Click(object sender, EventArgs e)
         {
-            if (gameEngine.MovePlayer(Character.MovementEnum.Left))
+            if (gameEngine.MovePlayer(Character.MovementEnum.Left, gameEngine.Map.Hero))
             {
+                gameEngine.EnemiesMove();
+                RemoveEnemies();
                 updateMap();
             }
         }
 
         private void btnMoveRight_Click(object sender, EventArgs e)
         {
-            if (gameEngine.MovePlayer(Character.MovementEnum.Right))
+            if (gameEngine.MovePlayer(Character.MovementEnum.Right, gameEngine.Map.Hero))
             {
+                gameEngine.EnemiesMove();
+                RemoveEnemies();
                 updateMap();
             }
+        }
+
+        private void BtnSave_Click(object sender, EventArgs e)
+        {
+            Save();
+        }
+
+        private void btnLoad_Click(object sender, EventArgs e)
+        {
+            LoadFile();
+        }
+
+        private void LoadFile()
+        {
+            gameEngine.Map = (Map)fileRead.ReadData<Map>();
+            updateMap();
         }
     }
 }

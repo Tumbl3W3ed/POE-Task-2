@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace POE
 {
+    [System.Serializable()]
     abstract class Character : Tile
     {
 
